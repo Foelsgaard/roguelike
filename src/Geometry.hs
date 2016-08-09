@@ -27,6 +27,11 @@ line' o p = translate o $ line (p - o)
 line :: Pos -> Shape
 line (x, y)
   | abs x <= 1 && abs y <= 1 = empty
+  | x == 0 = fromList $ zip [0,0..] ((tail . init) [0, signum y..y])
+  | y == 0 = fromList $ zip ((tail . init) [0, signum x..x]) [0,0..]
+  | x == y = fromList $ zip
+             ((tail . init) [0, signum x..x])
+             ((tail . init) [0, signum y..y])
   | otherwise = unions [ line p'
                        , singleton p'
                        , translate p' $ line p''
