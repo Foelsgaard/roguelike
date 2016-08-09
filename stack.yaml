@@ -1,0 +1,9 @@
+flags: {}
+extra-package-dbs: []
+packages:
+- '.'
+extra-deps:
+- hscurses-1.4.2.0
+- text-1.2.2.1
+- transformers-compat-0.5.1.4
+resolver: lts-6.10
