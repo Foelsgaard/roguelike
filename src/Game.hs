@@ -49,7 +49,7 @@ newtype Game a =
            )
 
 act :: Specific Entity -> Game ()
-act (player, Player _) = do
+act (player, Player) = do
 
   key <- getInput
 
@@ -68,7 +68,7 @@ act (player, Player _) = do
 
   return ()
 
-act (baddie, Baddie _) = do
+act (baddie, Baddie) = do
 
   pos <- use $ position baddie
 

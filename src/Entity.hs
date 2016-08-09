@@ -11,11 +11,12 @@ import Control.Arrow
 import Control.Monad.State
 
 data Entity
-  = Player Health
-  | Baddie Health
+  = Player
+  | Baddie
   deriving (Show, Eq, Ord)
 
 type Health = Integer
+type Speed  = Integer
 
 data EntityData =
   EntityData
@@ -24,12 +25,12 @@ data EntityData =
   }
 
 instance AsChar Entity where
-  fromChar '@' = Just $ Player 10
-  fromChar 'B' = Just $ Baddie 10
+  fromChar '@' = Just Player
+  fromChar 'B' = Just Baddie
   fromChar _   = Nothing
 
-  toChar (Player _) = '@'
-  toChar (Baddie _) = 'B'
+  toChar Player = '@'
+  toChar Baddie = 'B'
 
 instance Drawable Entity where
   draw window pos = draw window pos . CharRep

@@ -54,7 +54,7 @@ instance Drawable GameState where
     draw window pos visibletiles
     draw window pos visibleentities
 
-    where isPlayer (Player _) = True
-          isPlayer _          = False
+    where isPlayer Player = True
+          isPlayer _      = False
 
           
