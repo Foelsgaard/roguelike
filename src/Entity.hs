@@ -3,10 +3,9 @@ module Entity where
 import Drawable
 import Common
 
-import Data.Bimap (Bimap)
 import qualified Data.Bimap as BM
-import Data.Map (Map)
 import qualified Data.Map as M
+import qualified Data.Set as S
 
 import Control.Arrow
 import Control.Monad.State
@@ -20,8 +19,8 @@ type Health = Integer
 
 data EntityData =
   EntityData
-  { entBases     :: Map (ID Entity) Entity
-  , entPositions :: Bimap (ID Entity) Pos
+  { entBases     :: M.Map (ID Entity) Entity
+  , entPositions :: BM.Bimap (ID Entity) Pos
   }
 
 instance AsChar Entity where
