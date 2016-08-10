@@ -13,12 +13,7 @@ import UI.HSCurses.CursesHelper (start, end)
 import System.Random
 
 import Control.Monad (forever)
-import Control.Monad.IO.Class (liftIO)
-import Control.Monad.Free (foldFree)
 import Control.Monad.State (get)
-import Control.Monad.Reader (ask)
-
-import Data.Map (mapWithKey)
 
 import qualified Data.Map as M
 
@@ -53,6 +48,6 @@ game = forever $ do
   gs <- get
 
   sequence_
-    $ mapWithKey (curry act)
+    $ M.mapWithKey (curry act)
     $ (entBases . gameEntityData) gs
 
