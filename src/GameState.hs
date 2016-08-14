@@ -39,9 +39,10 @@ instance Drawable GameState where
         visible = M.fromSet id $ S.unions $ do
           pos <- M.elems $ M.intersection positions players
 
-          let unblocked =
-                S.filter (S.null . S.intersection blocks . line' pos) $
-                disk' range pos
+          let inrange = S.intersection (disk range pos) (M.keysSet board)
+              unblocked =
+                S.filter (S.null . S.intersection blocks . line pos) $
+                inrange
 
           return unblocked
 

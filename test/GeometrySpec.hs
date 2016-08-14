@@ -1,49 +1,55 @@
 module GeometrySpec where
 
+import Geometry
+import Common
+
 import Test.Hspec
 import Test.Hspec.QuickCheck
 import Test.QuickCheck
-import Geometry
-import qualified Data.Set as S
+
 import Data.Set
+
+import Prelude hiding (map, filter)
 
 spec :: Spec
 spec = do
-  modifyMaxSize (const 5000) $ parallel $ do
-   describe "line" $ do
-    
-     it "returns the correct line to (5,5)" $ do
-       line (5, 5) `shouldBe` fromList [(1,1), (2,2), (3,3), (4,4)]
+  parallel $ do
 
-     it "returns the empty set at zero" $ do
-       line (0, 0) `shouldBe` empty
+    context "disk" $ do
 
-     prop "does not return zero" $ do
-       \p -> (0, 0) `notMember` line p
+      prop (concat [ "filter ((==r + x(1|2)) . (fst|snd)) (disk r x) "
+                   , "== empty"
+                  ]) $ do
+        \r x@(x1, _) -> filter ((==r + x1) . fst) (disk r x) == empty
+        \r x@(_, x2) -> filter ((==r + x2) . snd) (disk r x) == empty
 
-     prop "does not return the end point" $ do
-       \p -> p `notMember` line p
+      prop "r /= 0 ==> length (disk r _) `quot` (r*r) <= 3" $ do
+        \r x -> r /= 0 ==> length (disk r x) `quot` (r*r) <= 3
 
-     prop "returns the shortest path to the end point" $ do
-       \(x,y) -> (x, y) /= (0, 0) ==> length (line (x,y)) == max (abs x) (abs y) - 1
+    context "line" $ do
 
-     prop "is symmetric about the origin" $ do
-       \p -> line p == S.map negate (line (-p))
+      prop "line y y \\\\ fromList [y, y] == line x y" $ do
+        \x y -> line x y \\ fromList [x, y] == line x y
 
-   describe "translate" $ do
+      prop (concat [ "line x y /= empty ==> "
+                   , "length (line x y) == "
+                   , "max (abs (x1-y1)) (abs (x2-y2)) - 1"
+                   ]) $ do
+        \x@(x1,x2) y@(y1, y2) -> line x y /= empty ==> 
+                  length (line x y) == max (abs (x1-y1)) (abs (x2-y2))-1
 
-     prop "translates the empty set to the empty set" $ do
-       \p -> translate p empty == empty
 
-     prop "cancels out an opposite translation" $ do
-       \p s -> translate p (translate (-p) s) == s
+    context "translate" $ do
+      
+      prop "translate p empty == empty" $ do
+        \p -> translate p empty == empty
 
-     prop "preserves cardinality" $ do
-       \p s -> length (translate p s) == length s
+      prop "translate p . translate -p == id" $ do
+        \p s -> (translate p . translate (-p)) s == s
 
-     prop "translates every point" $ do
-       \p s -> all (flip member (translate p s) . (+p)) s
+      prop "length . translate p == length" $ do
+        \p s -> (length . translate p) s == length s
 
- --  describe "disk" $ do
+      prop "translate p == map (+p)" $ do
+        \p s -> translate p s == map (+p) s
 
- --    prop "
