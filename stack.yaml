@@ -7,3 +7,6 @@ extra-deps:
 - text-1.2.2.1
 - transformers-compat-0.5.1.4
 resolver: lts-6.10
+build:
+  library-profiling: true
+  executable-profiling: true
